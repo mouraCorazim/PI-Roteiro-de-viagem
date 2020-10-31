@@ -3,10 +3,14 @@ import { classToggler } from './utils/togglers.js';
 
 const configButton = document.querySelector('button.configuracoes');
 const configNav = document.querySelector('nav#config');
+const adicionar = document.querySelector('.btn-adicionar');
+const diaSemana = document.getElementById('dia-semana');
+
 
 /********************************************* calendário *******************************************************/
 const inicio = "2021-01-07";
-const termino = "2021-01-20"
+const termino = "2021-01-20";
+var selecionado;
 
 class Calendario {
 	constructor(id){
@@ -16,7 +20,8 @@ class Calendario {
 		this.calendar = document.getElementById(id);
 		this.mostrarTemplate();
 		this.gridBody = this.calendar.querySelector('.grid#body');
-		this.selectedDay = document.querySelector('.dia-selecionado');
+		this.selectedDay = document.getElementById('dia-numero');
+		this.selectedDayWeek = document.getElementById('dia-semana')
 		this.mostrarDias();	
 	}
 
@@ -72,6 +77,14 @@ class Calendario {
 				if(this.cells[i].isInitialDay){
 					periodoViagem = 'period selected';
 					this.selectedDay.innerHTML = `${this.cells[i].date.date()}`;
+
+					selecionado = ((this.cells[i].date).format('dddd'));
+					this.selectedDayWeek.innerHTML = `${selecionado}`
+
+					/* console.log("esse: " + selecionado) */
+
+					adicionar.href = `nova-tarefa.html?${inicio}`
+
 				} else {
 					periodoViagem = 'period';
 				}
@@ -125,7 +138,6 @@ class Calendario {
 			diaInicial.add(1, 'days');	
 		} while(diaInicial.isSameOrBefore(diaFinal));
 
-		console.log(cells);
 		return cells;
 	}
 
@@ -143,21 +155,23 @@ class Calendario {
 				
 				/* desselecionar dia anterior */
 				let diaSelecionado = this.gridBody.querySelector('.selected');
+				
 				if (diaSelecionado) {
 					diaSelecionado.classList.remove('selected')
 				}
 				/* selecionar novo dia */
 				target.classList.add('selected');
 
-				/* console.log(this.cells[target.dataset.id].date.date()) */
-
 				this.diaSelecionado = this.cells[target.dataset.id].date;
 
 				/* div do dia selecionado*/
 				this.selectedDay.innerHTML = `${this.diaSelecionado.date()}`;
 
+
 				/* change */
-				this.calendar.dispatchEvent(new Event('change'));				
+				this.calendar.dispatchEvent(new Event('change'));	
+				
+				/* console.log(this.cells[target.dataset.id].date.date()) */
 			})
 		})
 	}
@@ -171,6 +185,7 @@ class Calendario {
 	}
 }
 
+	
 /************************************************ MAIN *****************************************************/
 const mnu = menu(classToggler);
 
@@ -181,6 +196,13 @@ const configMenu = mnu.defineMenu({ openButton: configButton,
 mnu.addOpenedListeners({ menu: configMenu });
 
 let calendario = new Calendario('calendar');
+
 calendario.getElement().addEventListener('change', e => {
-	console.log(calendario.value().format('YYYY-MM-DD'));
+	const dia = calendario.value().format('YYYY-MM-DD');
+	selecionado = (calendario.value()).format('dddd');
+
+	/* mudanças dinâmicas */
+	diaSemana.innerHTML = `${selecionado}`;
+	adicionar.href = `nova-tarefa.html?${dia}`
 })
+

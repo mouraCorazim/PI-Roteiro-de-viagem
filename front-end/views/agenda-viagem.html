@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../public/styles/main.css">
     <link rel="stylesheet" href="../public/styles/agenda-viagem.css">
     <link rel="stylesheet" href="../public/styles/menu.css">
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" href="../public/styles/cabecalho.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/pt-br.js"></script>
@@ -31,10 +31,10 @@
             <img src="" class="img-perfil">
             <div class="dados-perfil">
                 <div class="dados-perfil" id="nome">
-                    <!-- Adição dinâmica -->>
+                    <!-- Adição dinâmica -->
                 </div>
                 <div class="dados-perfil" id="user">
-                    <!-- Adição dinâmica -->>
+                    <!-- Adição dinâmica -->
                 </div>
             </div>
         </div>
@@ -98,13 +98,13 @@
                 </a> 
             </li>
             <li class="menu-li"> 
-                <a class="ancora-lateral" href="./membros.html"> 
+                <a class="ancora-lateral" href="./membros.html" id="link-membros"> 
                     <img class="img-menu-lateral" src="../public/icons/membros.svg"> 
                     <p>Membros</p>
                 </a> 
             </li>
             <li class="menu-li"> 
-                <a class="ancora-lateral" href="./itensDaMala.html"> 
+                <a class="ancora-lateral" href="./itensDaMala.html" id="link-mala"> 
                     <img class="img-menu-lateral" src="../public/icons/mala.svg"> 
                     <p>Mala</p>
                 </a> 
@@ -170,10 +170,10 @@
     </main>
     <template id="t-tarefa">
         <a class="tarefa" href="visualizar-tarefa.html">
-            <div id="horario">
+            <div id="horario-tarefa">
                <!-- hora -->
             </div>
-            <div id="nome">
+            <div id="nome-tarefa">
                 <!-- nome card -->
             </div>
         </a>

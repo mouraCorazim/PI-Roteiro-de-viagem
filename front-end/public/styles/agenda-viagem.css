@@ -33,6 +33,22 @@ li p.titulo{
     margin: 0;
 }
 
+li label#excluir-viagem{
+    padding: 2% 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    color: #006478;
+    font-weight: 700; 
+    font-size: 14px;
+}
+
+li label p{
+    margin-left: 20px;
+}
+
 
 /********************** Calendário *****************/
 .data {
@@ -40,8 +56,10 @@ li p.titulo{
     width: 90%;
     height: 30%;
     padding: 0 15px;
+    position: relative;
     display: flex;
     justify-content: center;
+    top: 130px;
     align-items: center;
 }
 
@@ -84,6 +102,7 @@ li p.titulo{
 .grid#header, .grid#body {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
 }
 
 .grid#header {
@@ -104,16 +123,28 @@ li p.titulo{
 
 .dia {
     cursor: pointer;
-    border: var(--fonte-normal) solid 1px;
+    color: #eeeeee;
+    border: #eeeeee solid 1px;
 }
 
 .period {
+    border: var(--fonte-normal) solid 1px;
+    border-radius: 4px;
+    color: var(--fonte-normal);
     background-color: var(--verde-seleção);
+    transition: 0.2s;
+}
+
+.period:hover{
+    color: black;
+    border-color: var(--verde-logo);
 }
 
 .selected {
     background-color: transparent;
     background-color: var(--azul-seleção);
+    border-color: var(--azul);
+    color: black;
 }
 
 .disabled{
@@ -125,11 +156,14 @@ div.tarefas{
     overflow-y: auto;
     width: 90%;
     height: 42%;
-    padding-top: 30px;
+    padding-top: 20px;
     display: flex;
+    position: relative;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    border-top: #eeeeee solid 1px;
+    top: 140px;
 }
 
 a.tarefa{
@@ -143,7 +177,7 @@ a.tarefa{
     cursor: pointer;
     color: var(--fonte-normal);
 }
-.tarefa #horario-tarefa{
+.tarefa .horario-tarefa{
     text-align: center;
     font-size: 30px;
     font-weight: 500;
@@ -161,11 +195,12 @@ a.tarefa{
     margin-top: 10px;
     position: relative;
     left: 40%;
+    top: 140px;
 }
 
 /************** Responsividade ************/
 @media (min-width: 375px){
-    .titulo #horario{
+    .titulo .horario{
         font-size: 36px;
     }
 
@@ -176,10 +211,12 @@ a.tarefa{
 
 @media (min-width: 500px){
     .dia-selecionado{
-        margin-right: 50px;
+        margin-right: 70px;
     }
 }
 
+@media (min-width: 600px){
+}
 
 @media (min-width: 800px){
     header .configuracoes{
@@ -208,11 +245,27 @@ a.tarefa{
     }
 
     #dia-numero{
-        width: 86px;
-        height: 86px;
+        width: 100px;
+        height: 100px;
     }
     
     #dia-semana{
-        font-size: 22px;
+        font-size: 20pt;
+        margin-top: 30px;
+    }
+
+    a.tarefa{
+        width: 93%;
+        padding-left: 20px;
+    }
+    
+    a.tarefa:hover{
+        border: solid 1px;
+        border-left-color: var(--verde-seleção);
+        border-top: none;
+        border-right: none;
+        border-bottom: none;
+        padding-left: 30px;
+        transition: 0.1s;
     }
 }

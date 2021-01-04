@@ -1,7 +1,11 @@
 import membersCards from "./modules/membersCards.js"
 import urlParser from "./modules/urlParser.js"
+import Fork from "./modules/Fork.js"
+import Optional from "./modules/Optional.js"
 import deleteAnInvitation from "./requests/deleteAnInvitation.js";
+import gtHeaders from "./requests/gtHeaders.js";
 import postNewMember from "./requests/postNewMember.js";
+import swal from 'sweetalert';
 
 const mmbc = membersCards();
 const urlp = urlParser();
@@ -17,52 +21,107 @@ const templateInvitedCard = document.querySelector("template#t_membro_busca");
 const urlParams = urlp.mapVariables(location.href);
 
 searchButton.addEventListener('click', function getUserAndTravelToMakeAnInvitation(){
+        inviteBlock.innerHTML = "";
 
         const urls = { "searchUser": `http://localhost:3333/usuarios/buscar?q=${searchInput.value}`,
                        "getTravel": `http://localhost:3333/viagens/ler/${urlParams.travel_id}` }
+ 
+        const init = { "headers": gtHeaders.authorized(), 
+                       "redirect": "follow" }
+        
+        const fetchs = [ fetch(urls.searchUser, init), fetch(urls.getTravel, init) ]
 
-        Promise.all([ fetch(urls.searchUser), fetch(urls.getTravel) ])
+        Promise.all(fetchs)
+               .then(responses => responses.map(res => res.json()))
+               .then(promises => Promise.all(promises))
                .then(values => ({"usuario": values[0], "viagem": values[1]}))
-               .then(objectResponses => Promise.all([objectResponses.usuario.json(), objectResponses.viagem.json()]))
-               .then(values => ({"usuario": values[0][0], "viagem": values[1]}))
-               .then(json => {
-
-                        console.log(json)
-                        
-                        const card = mmbc.buildToInviteCard(templateInvitedCard, json)
-                            
-                        inviteBlock.appendChild(card)
-               })
+               .then(json => mmbc.buildToInviteCard(templateInvitedCard, json))
+               .then(card => inviteBlock.appendChild(card))
+               .then(e => {console.log(e)})
 })
 
 window.addEventListener('load', function getActiveTravels(){
 
         const urlToGetUserMembersOfTravel = `http://localhost:3333/embarques/viagem/ler?id_viagem=${urlParams.travel_id}&finalizada=false`
 
-        fetch(urlToGetUserMembersOfTravel)
+        const init = { "headers": gtHeaders.authorized(), 
+                       "redirect": "follow" }
+
+        fetch(urlToGetUserMembersOfTravel, init)
                 .then(res => res.json())
                 .then(json => {
-
-                        const embarques = json.reduce((acc, current) => current.aceito? (acc.aceitos.push(current), acc): (acc.pendentes.push(current), acc), {"aceitos":[], "pendentes":[]})
-
-                        embarques.aceitos.map(data => mmbc.buildMemberCard(templateMemberCard, data))
-                                        .forEach(card => membersBlock.appendChild(card));
-
-                        embarques.pendentes.map(data => mmbc.buildGuestCard(templateGuestCard, data))
-                                        .forEach(card => guestsBlock.appendChild(card));
+                        const fork = Fork.of(json)
+                                         .between("aceitos", "pendentes")
+                                         .flatReduce(curr => curr.aceito)
+ 
+                        const toAppendMembersCards = Optional.of(fork.aceitos)
+                                                             .flatMap(data => mmbc.buildMemberCard(templateMemberCard, data))
+                                                             .flatMap(card => membersBlock.appendChild(card))
+                                                             .getOrElse(() => membersBlock.innerText = "Nenhum membro")
+ 
+                        const toAppendGuestsCards = Optional.of(fork.pendentes)
+                                                            .flatMap(data => mmbc.buildGuestCard(templateGuestCard, data))
+                                                            .flatMap(card => guestsBlock.appendChild(card))
+                                                            .getOrElse(() => guestsBlock.innerText = "Nenhum convite")
                 })
+                .catch(e => console.log(e))
 })
 
 window.addEventListener("guestCardCancelButtonClick", function cancelInvitation(e){
+        swal({
+                title: "Deseja cancelar este convite?",
+                text: "Você pode realizar esse convite novamente...",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+              })
+              .then((willDelete) => {
+                if (willDelete) {
+                        const request = deleteAnInvitation(gtHeaders.authorized(), e.detail)
 
-        const request = deleteAnInvitation(e.detail)
-
-        fetch(request.url, request.init)
+                        fetch(request.url, request.init)
+                                .then(res => res.json())
+                                .then(res => {
+                                        if(res.message !== undefined){
+                                                swal (`${res.message}` , { 
+                                                        icon: "error",
+                                                        buttons : false, 
+                                                        timer : 2000 })
+                                                .then((value) => window.location.href = `membros.html?travel_id=${urlParams.travel_id}`);
+                                        }
+                                })
+                                
+                        swal("Convite Deletado!", {
+                        icon: "success",
+                        buttons : false,
+                        timer : 2000
+                        })
+                        .then((value) => window.location.href = `membros.html?travel_id=${urlParams.travel_id}`);
+                } else {
+                        swal("Seu convite continua aguardando aprovação!")
+                }
+              })      
 })
 
 window.addEventListener("guestCardInviteButtonClick", function inviteToTravel(e){
 
-        const request = postNewMember(e.detail)
+        const request = postNewMember(gtHeaders.authorized(), e.detail)
 
         fetch(request.url, request.init)
+                .then(res => res.json())
+                .then(res => {
+                        if(res.message !== undefined){
+                                swal (`${res.message}` , { 
+                                        icon: "error",
+                                        buttons : false, 
+                                        timer : 2000 })
+                                .then((value) => window.location.href = `membros.html?travel_id=${urlParams.travel_id}`);
+                        } else {
+                                swal ("Convite Realizado!" , { 
+                                        icon: "success",
+                                        buttons : false, 
+                                        timer : 2000 })
+                                .then((value) => window.location.href = `membros.html?travel_id=${urlParams.travel_id}`);
+                        }
+                })
 })

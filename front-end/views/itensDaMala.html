@@ -42,12 +42,12 @@
                     <p>Viagens</p>
                 </a> 
             </li>
-            <li class="menu-li"> 
+            <!-- <li class="menu-li"> 
                 <a class="ancora-lateral" href="minhaMala.html"> 
                     <img class="img-menu-lateral" src="../public/icons/mala.svg"> 
                     <p>Mala</p>
                 </a> 
-            </li>
+            </li> -->
             <li class="menu-li"> 
                 <a class="ancora-lateral" href="embarque.html"> 
                     <img class="img-menu-lateral" src="../public/icons/embarcar.svg"> 
@@ -99,32 +99,32 @@
             <div id="itens-pessoais">
                 <h2>Seus itens</h2>
                 <h3 id="titulo-roupas">Roupas</h3>
-                <form id="adicionar-item-roupas" action="/data/itens.json">
+                <div id="adicionar-item-roupas" action="/data/itens.json">
                     <input type="hidden" name="categoria" value="1" readonly>
-                    <input type="hidden" name="pessoal" value="1" readonly>
-                    <input name="nome" type="text" placeholder="Adicionar roupa...">
-                    <input type="submit" value="+">
-                </form>
+                    <input type="hidden" name="pessoal" value="true" readonly>
+                    <input class="input-item" name="nome" type="text" placeholder="Adicionar roupa...">
+                    <button class="add-btn" id="btn-add-roupa">+</button>
+                </div>
                 <ul id="lista-roupas" class="lista-itens">
                     <!-- Itens adicionados dinamicamente -->
                 </ul>
                 <h3 id="titulo-higiene">Higiene</h3>
-                <form id="adicionar-item-higiene" action="/data/itens.json">
+                <div id="adicionar-item-higiene" action="/data/itens.json">
                     <input type="hidden" name="categoria" value="0" readonly>
-                    <input type="hidden" name="pessoal" value="1" readonly>
-                    <input name="nome" type="text" placeholder="Adicionar item de higiene...">
-                    <input type="submit" value="+">
-                </form>
+                    <input type="hidden" name="pessoal" value="true" readonly>
+                    <input class="input-item" name="nome" type="text" placeholder="Adicionar item de higiene...">
+                    <button class="add-btn" id="btn-add-higiene">+</button>
+                </div>
                 <ul id="lista-higiene" class="lista-itens">
                     <!-- Itens adicionados dinamicamente -->
                 </ul>
                 <h3 id="titulo-outros">Outros</h3>
-                <form id="adicionar-item-outros" action="/data/itens.json">
+                <div id="adicionar-item-outros" action="/data/itens.json">
                     <input type="hidden" name="categoria" value="2" readonly>
-                    <input type="hidden" name="pessoal" value="1" readonly>
-                    <input name="nome" type="text" placeholder="Adicionar item...">
-                    <input type="submit" value="+">
-                </form>
+                    <input type="hidden" name="pessoal" value="true" readonly>
+                    <input class="input-item" name="nome" type="text" placeholder="Adicionar item...">
+                    <button class="add-btn" id="btn-add-outro">+</button>
+                </div>
                 <ul id="lista-outros" class="lista-itens">
                     <!-- Itens adicionados dinamicamente -->
                 </ul>
@@ -132,12 +132,12 @@
             <span id="divisoria-listas"></span>
             <div id="itens-viagem">
                 <h2>Itens da viagem</h2>
-                <form id="adicionar-item" action="/data/itens.json">
+                <div id="adicionar-item" action="/data/itens.json">
                     <input type="hidden" name="categoria" value="3" readonly>
-                    <input type="hidden" name="pessoal" value="0" readonly>
-                    <input name="nome" type="text" placeholder="Adicionar à lista da viagem...">
-                    <input type="submit" value="+">
-                </form>
+                    <input type="hidden" name="pessoal" value="false" readonly>
+                    <input class="input-item" name="nome" type="text" placeholder="Adicionar item coletivo...">
+                    <button class="add-btn" id="btn-add-comum">+</button>
+                </div>
                 <ul id="lista-itens-viagem" class="lista-itens-comuns">
                     <!-- Itens adicionados dinamicamente -->
                 </ul>
@@ -150,8 +150,10 @@
         <li class="item-pessoal">
             <input type="hidden" name="id" value="" readonly>
             <input type="hidden" name="categoria" value="" readonly>
-            <input type="checkbox" name="checado" id="">
-            <label for=""><!-- Nome de item adicionado dinamicamente --></label>
+            <input type="checkbox" name="checado" id="" class="item-checkbox" hidden>
+            <label for="" class="item-checkbox-style"><!-- personalização do checkbox --></label>
+            <label for="" class="item-label"><!-- Nome de item adicionado dinamicamente --></label>
+            <button class="delete-item-personal">x</button>
         </li>
     </template>
 
@@ -160,15 +162,16 @@
             <div class="botao-check">
                 <input type="hidden" name="id" value="" readonly>
                 <input type="hidden" name="categoria" value="3" readonly>
-                <input type="checkbox" name="checado" id="">
-                <label for=""><!-- Nome de item adiciconado dinamicamente --></label>
+                <input type="checkbox" name="checado" id="" class="item-checkbox" hidden>
+                <label for="" class="item-checkbox-style"><!-- personalização do checkbox --></label>
+                <label for="" class="item-label"><!-- Nome de item adiciconado dinamicamente --></label>
             </div>
             <div class="item-autor">
                 <img src="" alt="">
                 <p class="autor-username"><!-- username adicionado dinamicamente --></p>
             </div>
+            <button class="delete-item-common">x</button>
         </li>
-        <span class="divisoria-item-comum"></span>
     </template>
     <script src="../bundles/menus.bundle.js"'></script>
     <script src="../bundles/travelHeader.bundle.js"></script>

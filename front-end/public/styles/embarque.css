@@ -10,26 +10,31 @@
 
 .convite {
     height: 100px;
-    background-color: #F4FDFF;
+    /* background-color: #F4FDFF; */
     border-width: thin;
-    border-style: solid;
-    border-color: #c2c1c1;
-    border-radius: 8px;
+    border: 3px solid;
+    border-color: transparent;
     margin: 10px;
     margin-bottom: 15px;
     position: relative;
     display: flex;
-
+    transition: 0.2s;
 }
 
-.usuario-convite {
-    width: 194px;
-    position: relative;
-    margin-left: 10px;
+.convite:hover{
+    border-left: solid 3px var(--verde-seleção);
+    box-shadow: 0px 0px 10px #eeeeee;
+    margin-right: 10px;
+}
+
+.convite-user-imagem{
+    border-radius: 36px;
+    width: 72px;
+    height: 72px;
 }
 
 .user {
-    width: 100%;
+    width: 70%;
     display: flex;
 }
 
@@ -66,13 +71,14 @@
     justify-content: space-around;
     background-color: #026F81;
     border-radius: 8px;
-    width: 90%;
+    min-width: 90%;
     height: 40px;
     margin: auto;
     margin-top: 10px;
 }
 
 .convite-destino > p {
+    margin: 0 10px;
     display: flex;
     align-self: center;
     color: #FFFFFF;
@@ -136,43 +142,13 @@
     text-align: center;
 }
 
-.desktop-aceitar {
-    display: block;
-}
-  
-.mobile-aceitar {
-    display: none;
-}
-  
-.desktop-recusar {
-    display: block;
-}
-  
-.mobile-recusar {
-    display: none;
-}
-
 @media(max-width: 480px) {
-    .desktop-aceitar {
-        display: none;
+    .user{
+        width: 100%;
     }
-    .mobile-aceitar {
-        display: block;
-    }
-    .mobile-aceitar > img{
-        width: 20px;
-        height: 20px;
-    }
-
-    .desktop-recusar {
-        display: none;
-    }
-    .mobile-recusar {
-        display: block;
-    }
-    .mobile-recusar > img{
-        width: 20px;
-        height: 2
-    }
-    
+    .convite {
+        flex-direction: column;
+        height: auto;
+        padding-bottom: 20px;
+    }  
 }

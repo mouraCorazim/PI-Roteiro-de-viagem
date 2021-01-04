@@ -1,4 +1,5 @@
 /************** Div Principal ************/
+
 .secao-principal, .conteudo{
     display: flex;
     flex-direction: column;
@@ -67,6 +68,7 @@ input.pesquisar {
     background-repeat: no-repeat;
     margin: 10px 10px 20px 10px;
     border-radius: 8px;
+    border: solid var(--cinza-bordas) 1px;
     overflow: hidden;
 }
 
@@ -149,6 +151,7 @@ div.membros-fotos.ativa{
 }
 
 img.imagem-membro{
+    border-radius: 16px;
     height: 32px;
     width: 32px;
     margin: 4px 4px 4px 4px;
@@ -171,6 +174,16 @@ p.autor{
     left: 80%;
 }
 
+.membros-fotos p{
+    background-color: #65636396;
+    color: white;
+    height: 20px;
+    padding: 5px;
+    margin: 0;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
 /************** Responsividade ************/
 @media (min-width: 800px){	
     .h1{
@@ -185,5 +198,14 @@ p.autor{
     }
     nav{
         display: flex;
+    }
+
+    div.overlay-imagem:hover{
+        margin-left: 12px;
+        border-left: solid 5px;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-left-color: var(--verde-seleção);
+        transition: 0.1s;
     }
 }

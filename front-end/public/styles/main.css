@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 :root {  /* referencia a raiz do documento*/
     --cinza-bordas: #dddddd; 
     --fonte-normal:#656363;
@@ -10,6 +11,8 @@
     --verde-seleção: #92eb9b;
     --amarelo: #efe05a;
     --vermelho-btn: #e84242;
+    --btn-azul-hover:  #004a58;
+    --btn-branco-hover: #f1f1f1;
 }
 
 ::-webkit-scrollbar{
@@ -22,7 +25,6 @@
     scrollbar-base-color: #dddddda2;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 html {
     font-family: Roboto, sans-serif;
     }
@@ -45,6 +47,10 @@ button:focus{
     outline: 0;
 }
 
+button:hover {
+    cursor: pointer;
+}
+
 .h1{
     width: 90%;
     display: flex;
@@ -65,6 +71,12 @@ button:focus{
     width: 200px;
 }
 
+#erro p {
+    color: #e84242;
+    text-align: center;
+    font-size: 14px;
+}
+
 @media (min-width: 800px){
     body{
         min-height: 800px;
@@ -77,5 +89,10 @@ button:focus{
         width: 140px;
         margin-left: 55%;
     }
-    
+
+    svg:hover > path, svg:hover > g > path{
+        cursor: pointer;
+        transition: 0.5s;
+        fill: var(--btn-azul-hover);
+    }
 }

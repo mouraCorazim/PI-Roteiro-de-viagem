@@ -37,12 +37,12 @@
                     <p>Viagens</p>
                 </a> 
             </li>
-            <li class="menu-li"> 
+            <!-- <li class="menu-li"> 
                 <a class="ancora-lateral" href="minhaMala.html"> 
                     <img class="img-menu-lateral" src="../public/icons/mala.svg"> 
                     <p>Mala</p>
                 </a> 
-            </li>
+            </li> -->
             <li class="menu-li"> 
                 <a class="ancora-lateral" href="embarque.html"> 
                     <img class="img-menu-lateral" src="../public/icons/embarcar.svg"> 
@@ -82,26 +82,27 @@
         <div id="alterar-senha"> <!--  method="post" -->
             <div>
                 <div class="senha">
-                    <input type="password" class="pass" id="senha-atual" name="senha-atual" placeholder="Senha Atual">
+                    <input type="password" class="pass" id="senha-atual" name="senha_atual" placeholder="Senha Atual">
                     <div class="visualizar" id="senha-atual-visibilidade">
                         <img  class = "olho1" src="../public/icons/olho-fechado.svg">
                     </div>
                 </div>
                 <div class="senha">
-                    <input type="password" class="pass" id="nova-senha" name="nova-senha" placeholder="Nova Senha">  
+                    <input type="password" class="pass" id="nova-senha" name="nova_senha" placeholder="Nova Senha">  
                     <div class="visualizar" id="nova-senha-visibilidade">
                         <img class = "olho2" src="../public/icons/olho-fechado.svg">
                     </div>
                 </div>
                 <div class="senha">
-                    <input type="password" class="pass" id="confirmar-senha" name="confirmar-senha" placeholder="Confirmar Senha">
+                    <input type="password" class="pass" id="confirmar-senha" name="confirmar_senha" placeholder="Confirmar Senha">
                     <div class="visualizar" id="confirmar-senha-visibilidade">
                         <img  class ="olho3" src="../public/icons/olho-fechado.svg">
                     </div>
                 </div>
+                <div id="erro"></div>
             </div>
         </div>
-        <button class="salvar">Salvar Alterações</button>
+        <button class="salvar" id="salvar-senha">Salvar Alterações</button>
     </main>
     <script src="../bundles/menus.bundle.js"></script>
     <script src='../bundles/alterarSenha.bundle.js'></script>

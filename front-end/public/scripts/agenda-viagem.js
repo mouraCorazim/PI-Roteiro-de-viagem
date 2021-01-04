@@ -2,6 +2,12 @@ import menu from './modules/menu.js';
 import { classToggler } from './utils/togglers.js';
 import urlParser from './modules/urlParser.js';
 import taskCards from './modules/taskCards.js';
+import getTravelTasks from './requests/getTravelTasks.js';
+import getTravel from "./requests/getTravel.js";
+import gtHeaders from './requests/gtHeaders.js'
+import Optional from './modules/Optional.js';
+import swal from 'sweetalert';
+
 
 const membersLink = document.querySelector('a#link-membros');
 const bagLink = document.querySelector('a#link-mala');
@@ -9,26 +15,34 @@ const configButton = document.querySelector('button.configuracoes');
 const configNav = document.querySelector('nav#config');
 const adicionar = document.querySelector('.btn-adicionar');
 const diaSemana = document.getElementById('dia-semana');
-
-
+const editTrip = document.getElementById('editar-viagem');
+const deleteBtn = document.getElementById('excluir-viagem');
+const linkShare = document.getElementById('btn-compartilhar');
 
 /********************************************* calendário *******************************************************/
-const inicio = "2021-01-07";
-const termino = "2021-01-20";
+var inicio;
+var termino;
 var selecionado;
-var dia;
+var dia = inicio;
 
 class Calendario {
 	constructor(id){
 		const dataInicial = 
-		this.cells = [];
-		this.dataSelecionada = null;
-		this.calendar = document.getElementById(id);
-		this.mostrarTemplate();
-		this.gridBody = this.calendar.querySelector('.grid#body');
-		this.selectedDay = document.getElementById('dia-numero');
-		this.selectedDayWeek = document.getElementById('dia-semana')
-		this.mostrarDias();	
+			this.cells = [];
+			this.dataSelecionada = null;
+			this.calendar = document.getElementById(id);
+			this.mostrarTemplate();
+			this.gridBody = this.calendar.querySelector('.grid#body');
+			this.selectedDay = document.getElementById('dia-numero');
+			this.selectedDayWeek = document.getElementById('dia-semana')
+			this.verificarData();	
+	}
+
+	verificarData(){
+		if (inicio == undefined){
+			return;
+		} 
+		this.mostrarDias();
 	}
 
 	mostrarTemplate() {
@@ -150,6 +164,8 @@ class Calendario {
 	diaSelecionado(){
 		let dias = this.calendar.querySelectorAll('.dia');
 
+		fetchTarefas();
+
 		dias.forEach(dia => {
 			dia.addEventListener('click', e => {
 				let target = e.target;
@@ -178,6 +194,8 @@ class Calendario {
 				this.calendar.dispatchEvent(new Event('change'));	
 				
 				/* console.log(this.cells[target.dataset.id].date.date()) */
+
+				fetchTarefas();
 			})
 		})
 	}
@@ -191,7 +209,7 @@ class Calendario {
 	}
 }
 
-	
+
 /************************************************ MAIN *****************************************************/
 const mnu = menu(classToggler);
 const urlp = urlParser();
@@ -209,22 +227,48 @@ const templateTarefas = document.getElementById('t-tarefa');
 
 const viagem = location.href.split("?")[1];
 
-let calendario = new Calendario('calendar');
+var calendario = new Calendario('calendar');
+
+window.addEventListener('load', () => {
+	const request = getTravel(gtHeaders.authorized(), travelId)
+
+	fetch(request.url, request.init)
+		.then(res => res.json())
+		.then(json => {
+			if(json.message == "Access Denied"){
+					swal ("Faça Login para continuar" , { 
+						icon: "error",
+						buttons : false, 
+						timer : 2000 })
+					.then((value) => window.location.href ="index.html")}
+			else {
+				inicio = `${json.inicio}`
+				termino = `${json.termino}`
+				calendario = new Calendario('calendar');
+			}
+					
+			});
+
+});
+
 
 function fetchTarefas() {
 	
-	const urlToGetTasksBelongsToTravel = `http://localhost:3333/tarefas/viagem/ler?id_viagem=${travelId}&finalizada=false`
+	const request = getTravelTasks(gtHeaders.authorized(), dia, travelId)
 
-	fetch(urlToGetTasksBelongsToTravel)
+	fetch(request.url, request.init)
 		.then(res => res.json())
 		.then(json => {
 			
-			json.map(tarefa => taskCards().buildCard(templateTarefas, tarefa))
-		        .forEach(card => blocoTarefas.appendChild(card))
-		
+			const toAppendTasksCards = Optional.of(json)
+											   .filter(json => Array.isArray(json))
+											   .flatMap(tarefa => taskCards().buildCard(templateTarefas, tarefa))
+											   .flatMap(card => blocoTarefas.appendChild(card))
+											   .getOrElse(() => { throw new Error("Resposta do não é uma lista de tarefas")})
+			
 		})
+		.catch(e => console.log(e))
 }
-
 
 calendario.getElement().addEventListener('change', e => {
 	dia = calendario.value().format('YYYY-MM-DD');
@@ -236,14 +280,48 @@ calendario.getElement().addEventListener('change', e => {
 
 	blocoTarefas.innerHTML = '';
 	/* console.log("id=" + travelId) */
-	console.log(dia)
+	/*console.log(dia)*/
 	/* console.log("url =" + urlp.mapVariables(location.href)); */
-	fetchTarefas();
+	
 })
-
 
 membersLink.href += `?travel_id=${travelId}`;
 bagLink.href += `?travel_id=${travelId}`;
+editTrip.href += `?travel_id=${travelId}`;
+linkShare.href += `http://127.0.0.1:5500/front-end/views/agenda-viagem.html?travel_id=${travelId}`;
 
 fetchTarefas();
+
+deleteBtn.addEventListener('click', () => {
+		swal({
+			title: "Deseja apagar essa viagem?",
+			text: "Você não poderá restaura-la após apagar...",
+			icon: "warning",
+			buttons: true,
+			dangerMode: true,
+		  })
+		  .then((willDelete) => {
+			if (willDelete) {
+				const urlToDeleteTrip = `http://localhost:3333/viagens/apagar/${travelId}`
+				   
+				const init = { "headers": gtHeaders.authorized(), 
+							   "method": "PUT", 
+							   "mode": "cors",
+							   "redirect": "follow"}
+			
+				fetch(urlToDeleteTrip, init)
+					.then(res => res.json())
+					.catch(e => console.log(e))
+							
+					swal("Viagem Deletada!", {
+					icon: "success",
+					buttons : false,
+					timer : 2000
+					})
+					.then((value) => window.location.href = "listaDeViagem.html");
+			}else{
+				document.location.reload(true);
+			}
+		  })     
+})
 

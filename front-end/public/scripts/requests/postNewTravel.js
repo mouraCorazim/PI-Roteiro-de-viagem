@@ -1,15 +1,13 @@
-export default function postNewtravel(requestBody){
+export default function postNewtravel(authorizedHeader, requestBody){
 
     const url = `http://localhost:3333/viagens/escrever`
 
-    const headers = { "Authorization": "Token " + "JWT by localstorage", 
-                      "Content-Type": "application/json" }
-
     const body = JSON.stringify(requestBody)
 
-    const init = { "headers": headers, 
+    const init = { "headers": authorizedHeader,
                    "method": "POST", 
-                   "body": body, 
+                   "body": body,
+                   "mode": "cors",
                    "redirect": "follow" }
 
 

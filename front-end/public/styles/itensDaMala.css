@@ -11,7 +11,6 @@ main {
     margin-top: 10px;
 }
 
-<<<<<<< HEAD
 input[type="submit"]{
     background-color:  #28de71ab;
     border: none;
@@ -92,8 +91,6 @@ div.data-viagem{
     text-align: center;
 }
 
-=======
->>>>>>> 9640fcb10d655019ad93c6a6f7fb520e80740ffc
 /************** Cards ************/
 .viagens{
     overflow-y: auto;
@@ -169,27 +166,43 @@ div.data-viagem{
 /* Listas de itens */
 
 span#divisoria-listas{
-    background-color: skyblue;
-    margin: 5px 0 5px 10vw;
+    background-color: #ddd;
+    margin: 50px auto 5px;
     height: 1px;
-    width: 80vw;
+    width: 90vw;
 }
 
 section#lista-itens{
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: relative;
+    top: 130px;
+}
+
+div#itens-pessoais{
+    width: 90%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+div#itens-pessoais h2, div#itens-pessoais h3{
+    align-self: flex-start;
 }
 
 ul.lista-itens{
     display: flex;
-    overflow-y: scroll;
+    overflow-y: auto;
     margin-top: 5px;
     width: 300px;
 }
 
 ul.lista-itens-comuns{
     display: flex;
+    overflow-y: auto;
     flex-direction: column;
     height: 560px;
     margin-top: 5px;
@@ -205,7 +218,7 @@ div.item-autor{
     align-items: center;
     display: flex;
     flex-direction: column;
-    margin-left: 40px;
+    margin-left: 20px;
 }
 
 div.item-autor > p {
@@ -227,6 +240,67 @@ div#itens-viagem{
     flex-direction: column;
     justify-content: center;
 }
+
+#itens-viagem h2{
+    text-align: center;
+}
+
+.input-item{
+    border-radius: 8px;
+    border: #dddddd solid 2px;
+    height: 25px;
+    padding-left: 10px;
+}
+
+button.add-btn{
+    color: #28DE70;
+    font-size: 20px;
+    padding: 0 10px;
+    background-color: transparent;
+    border: transparent;
+}
+/*********** checkbox personalizada ***************/
+  .item-checkbox-style {
+    position: relative;
+    padding-left: 2.2em;
+    display: inline-block;
+  }
+  .item-checkbox-style::before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 15px;
+    width: 15px;
+    background: #FFF;
+    margin-right: 0.5em;
+    border: 1px solid #026F81;
+    transition: all 0.2s ease;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translate(0, -50%);
+  }
+  .item-checkbox-style::after {
+    content: "\2713";
+    position: absolute;
+    top: 50%;
+    left: 22%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: 700;
+    color: #026F81;
+    opacity: 0;
+    transition: all 0.2s ease;
+  }
+  .item-checkbox:checked + .item-checkbox-style::after {
+    opacity: 1;
+  }
+
+  .delete-item-personal, .delete-item-common{
+      border: none;
+      background-color: transparent;
+      color: var(--vermelho-btn);
+  }
 
 @media (max-width: 425px){
     .titulo-viagem{
@@ -251,7 +325,7 @@ div#itens-viagem{
 @media (min-width: 800px){
 
     span#divisoria-listas{
-        background-color: skyblue;
+        background-color: #ddd;
         margin: 20px 0 0 0;
         height: 600px;
         width: 1px;
@@ -259,7 +333,16 @@ div#itens-viagem{
 
     section#lista-itens{
         flex-direction: row;
-        justify-content: space-around;
+        justify-content: space-evenly;
+    }
+
+    div#itens-pessoais{
+        width: 50%;
+        margin: 0 10px;
+    }
+
+    #itens-viagem h2{
+        width: 100%;
     }
 
     ul.lista-itens{
